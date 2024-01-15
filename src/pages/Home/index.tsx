@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Card, Layout, Menu, theme } from "antd";
+import React, { useEffect, useState } from "react";
+import { Card, Layout, Menu, message, theme } from "antd";
 import logo from "@public/icon.ico";
 import { Outlet, useNavigate } from "react-router-dom";
 import { routes } from "@/routes";
@@ -22,7 +22,17 @@ const App: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const preAgeing = Math.floor(
+      JSON.parse(localStorage.getItem("LOGIN_AGEING")!)
+    );
+    // 登录时效30分钟
+    const nowAgeing = (+new Date() - preAgeing) / 1000 / 60 < 30;
+    if (!nowAgeing) {
+      message.warning("登录时效已到，请重新登录");
+      navigate("/", { replace: true });
+    }
+  }, [location.pathname]);
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
