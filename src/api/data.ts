@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
 import { post } from ".";
+import { useQuery } from "react-query";
 
 export interface RespectivelyCount {
   platform: string;
@@ -19,6 +19,16 @@ export interface Result {
   commentAllCount: number;
 }
 
+export interface VisitCollect {
+  date: string;
+  platform: string;
+  count: number;
+}
+
+export interface ChartsResult {
+  visitCollect: VisitCollect[];
+}
+
 // 访问总数量：网页 - Weapp - 昨日访问数
 export function getVisitData() {
   return useQuery(
@@ -29,9 +39,21 @@ export function getVisitData() {
     }
   );
 }
-// 用户总量：总量 - 近一个月注册数
-// 文章阅读汇总：数量 - 获赞 - 挨踩 - 评论
 
+export function getChartsData() {
+  return useQuery(["chatsData"], async () => {
+    const res = await post<ChartsResult>("/back/getChartsDataMonth");
+    return {
+      visitCollect: res.visitCollect.map((item) => {
+        return {
+          ...item,
+          date: item.date.substring(5),
+          platform: item.platform === "1" ? "网页" : "微信小程序",
+        };
+      }),
+    };
+  });
+}
 // 近一个月访问数量汇总，分为网页-app，折线图
 // 近一个月发布文章数量汇总，条形图
 // 文章阅读量：网页-weapp，饼图
