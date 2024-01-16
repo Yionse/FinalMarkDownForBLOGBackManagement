@@ -82,9 +82,7 @@ const App: React.FC = () => {
           <h2 className="pl-6">{title}</h2>
         </Header>
         <Content style={{ margin: "16px" }}>
-          <Card style={{ height: "100%" }}>
-            <Outlet />
-          </Card>
+          <Outlet />
         </Content>
       </Layout>
     </Layout>
