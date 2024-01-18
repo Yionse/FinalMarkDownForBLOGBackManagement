@@ -1,6 +1,10 @@
 import {
+  CheckCircleOutlined,
   HomeOutlined,
   OrderedListOutlined,
+  PaperClipOutlined,
+  SnippetsOutlined,
+  UnorderedListOutlined,
   UserAddOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
@@ -18,19 +22,29 @@ export const routes: MenuItem[] = [
     key: "home",
   },
   {
-    label: "用户管理",
+    label: "用户列表",
     icon: <UsergroupAddOutlined />,
     key: "user",
+  },
+  {
+    label: "文章管理",
+    icon: <SnippetsOutlined />,
+    key: "paper",
     children: [
       {
-        label: "用户列表",
+        label: "文章列表",
+        icon: <UnorderedListOutlined />,
         key: "list",
-        icon: <OrderedListOutlined />,
       },
       {
-        label: "添加用户",
-        key: "add",
-        icon: <UserAddOutlined />,
+        label: "文章管理",
+        icon: <PaperClipOutlined />,
+        key: "manage",
+      },
+      {
+        label: "文章审核",
+        icon: <CheckCircleOutlined />,
+        key: "check",
       },
     ],
   },

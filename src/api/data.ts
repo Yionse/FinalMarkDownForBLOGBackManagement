@@ -29,7 +29,21 @@ export interface ChartsResult {
   visitCollect: VisitCollect[];
 }
 
-// 访问总数量：网页 - Weapp - 昨日访问数
+export interface UserList {
+  qq: string;
+  userImg: string;
+  userName: string;
+  registerDate: string;
+  vermicelliCount: string;
+  pagesNumber: string;
+  school: string;
+  prefession: string;
+  sex: string;
+  description: string;
+  messageDataName: string;
+}
+
+// 网站数据
 export function getVisitData() {
   return useQuery(
     ["visitCount"],
@@ -40,9 +54,12 @@ export function getVisitData() {
   );
 }
 
-export function getChartsData() {
-  return useQuery(["chatsData"], async () => {
-    const res = await post<ChartsResult>("/back/getChartsDataMonth");
+// 近一个月访问数量汇总，分为网页-app，折线图
+export function getChartsVisitData(visitDataDateForRadius: string) {
+  return useQuery(["chartsData"], async () => {
+    const res = await post<ChartsResult>("/back/getChartsDataMonth", {
+      visitDataDateForRadius,
+    });
     return {
       visitCollect: res.visitCollect.map((item) => {
         return {
@@ -54,7 +71,21 @@ export function getChartsData() {
     };
   });
 }
-// 近一个月访问数量汇总，分为网页-app，折线图
-// 近一个月发布文章数量汇总，条形图
+
 // 文章阅读量：网页-weapp，饼图
-// 文章阅读量之最，列表
+export function getChartsPageData() {
+  return useQuery(["pageReadCount"], async () =>
+    post<{ pageViewCount: {}[] }>("/back/getPageReadCount")
+  );
+}
+
+// 用户列表
+export function getUserList() {
+  return useQuery(
+    ["userList"],
+    async () => post<{ userList: UserList[] }>("/back/userList"),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+}

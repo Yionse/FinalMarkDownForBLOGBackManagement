@@ -1,28 +1,65 @@
-import { getChartsData, getVisitData } from "@/api/data";
+import {
+  getChartsPageData,
+  getChartsVisitData,
+  getVisitData,
+} from "@/api/data";
 import { ChromeOutlined } from "@ant-design/icons";
-import { Card } from "antd";
+import { Card, Radio } from "antd";
 import "./index.less";
-import { Line } from "@ant-design/charts";
+import { Line, Pie } from "@ant-design/charts";
+import { useEffect, useState } from "react";
 
 export default function HomeSon() {
   const { data } = getVisitData();
-  const { data: charts } = getChartsData();
+  const [visitDataDateForRadius, setVisitDataDateForRadius] =
+    useState<string>("month");
+  const { data: charts, refetch } = getChartsVisitData(visitDataDateForRadius);
+  const { data: pagesData } = getChartsPageData();
   const configs = {
     data: charts?.visitCollect || [],
     xField: "date",
     yField: "count",
     seriesField: "platform",
     legend: {
+      layout: "horizontal",
       position: "top",
-    },
+    } as any,
     // @TODO 后续会换一种动画方式
     animation: {
       appear: {
-        animation: "wave-in",
+        animation: "path-in",
         duration: 5000,
       },
     },
+    interactions: [{ type: "element-active" }],
   };
+  const configPie = {
+    appendPadding: 10,
+    data: (pagesData?.pageViewCount as any) || [],
+    angleField: "value",
+    colorField: "type",
+    radius: 0.9,
+    label: {
+      type: "inner",
+      offset: "-30%",
+      style: {
+        fontSize: 12,
+        textAlign: "center",
+      },
+    },
+    legend: {
+      layout: "vertical",
+      position: "bottom",
+    },
+    interactions: [
+      {
+        type: "element-active",
+      },
+    ],
+  } as any;
+  useEffect(() => {
+    refetch();
+  }, [visitDataDateForRadius]);
   return (
     <div>
       {/* 统计类数据 */}
@@ -127,10 +164,24 @@ export default function HomeSon() {
       {/* 图表类数据 */}
       <div className="flex flex-row mt-4">
         <Card className="w-2/3 flex-grow-0 overflow-hidden">
+          <h2 className="flex flex-row justify-between">
+            <span>近一个月访问数量</span>
+            <Radio.Group
+              defaultValue={visitDataDateForRadius}
+              onChange={(e) => setVisitDataDateForRadius(e.target.value)}
+              optionType="button"
+            >
+              <Radio value="month">30天</Radio>
+              <Radio value="week">7天</Radio>
+            </Radio.Group>
+          </h2>
           <Line {...configs} />
         </Card>
         <div className="w-4" />
-        <Card className="w-1/3"></Card>
+        <Card className="w-1/3">
+          <h2>阅读量分布</h2>
+          <Pie {...configPie} />
+        </Card>
       </div>
     </div>
   );

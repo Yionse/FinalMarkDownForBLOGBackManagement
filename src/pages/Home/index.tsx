@@ -3,6 +3,7 @@ import { Card, Layout, Menu, message, theme } from "antd";
 import logo from "@public/icon.ico";
 import { Outlet, useNavigate } from "react-router-dom";
 import { routes } from "@/routes";
+import "./index.less";
 
 const { Header, Content, Sider } = Layout;
 
@@ -34,7 +35,7 @@ const App: React.FC = () => {
     }
   }, [location.pathname]);
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout>
       <Sider
         collapsible
         collapsed={collapsed}
@@ -77,11 +78,18 @@ const App: React.FC = () => {
           }}
         />
       </Sider>
-      <Layout>
+      <Layout style={{ height: "100vh" }}>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <h2 className="pl-6">{title}</h2>
         </Header>
-        <Content style={{ margin: "16px" }}>
+        <Content
+          id="ContentBox"
+          style={{
+            margin: "16px",
+            height: "calc(100vh - 16px - 64px)",
+            overflowY: "scroll",
+          }}
+        >
           <Outlet />
         </Content>
       </Layout>
