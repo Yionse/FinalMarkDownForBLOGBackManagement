@@ -5,6 +5,7 @@ import HomeSon from "./pages/Home/HomeSon";
 import User from "./pages/User";
 import Paper from "./pages/Paper";
 import Manage from "./pages/Paper/Manage";
+import Check from "./pages/Paper/Check";
 export default function App() {
   return (
     <BrowserRouter>
@@ -16,7 +17,7 @@ export default function App() {
           <Route path="paper">
             <Route index path="list" element={<Paper />} />
             <Route index path="manage" element={<Manage />} />
-            <Route index path="check" element={<Paper />} />
+            <Route index path="check" element={<Check />} />
           </Route>
         </Route>
       </Routes>

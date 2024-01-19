@@ -1,5 +1,5 @@
 import { UserList, getUserList } from "@/api/data";
-import { Avatar, Button, Card } from "antd";
+import { Avatar, Button, Card, message } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import moment from "moment";
 
@@ -40,7 +40,11 @@ export default function User() {
       title: "操作",
       render: () => (
         <>
-          <Button type="link" style={{ color: "red" }}>
+          <Button
+            type="link"
+            style={{ color: "red" }}
+            onClick={() => message.error("功能暂未开放")}
+          >
             删除
           </Button>
         </>

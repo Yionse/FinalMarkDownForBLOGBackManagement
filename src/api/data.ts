@@ -1,5 +1,5 @@
-import { post } from ".";
-import { useQuery } from "react-query";
+import { get, post } from ".";
+import { useMutation, useQuery } from "react-query";
 
 export interface RespectivelyCount {
   platform: string;
@@ -41,6 +41,20 @@ export interface UserList {
   sex: string;
   description: string;
   messageDataName: string;
+}
+
+export interface PagesList {
+  qq: string;
+  pageid: string;
+  title: string;
+  coverUrl: string;
+  createTime: string;
+  likeCount: number;
+  unlikeCount: number;
+  description: string;
+  viewCount: number;
+  username: string;
+  pagesNumber: string;
 }
 
 // 网站数据
@@ -87,5 +101,23 @@ export function getUserList() {
     {
       refetchOnWindowFocus: false,
     }
+  );
+}
+
+// 用户列表
+export function getPagesList() {
+  return useQuery(
+    ["pagesList"],
+    async () => post<{ pagesList: PagesList[] }>("/back/pagesList"),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+}
+
+// 获取文章数据
+export function getMdData() {
+  return useMutation(["pageData"], async (pageId: string) =>
+    get<{ content: string }>("/back/md", { pageId })
   );
 }
