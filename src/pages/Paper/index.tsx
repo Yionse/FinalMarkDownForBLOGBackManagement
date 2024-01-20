@@ -1,11 +1,22 @@
 import { PagesList, getMdData, getPagesList } from "@/api/data";
 import MdPreview from "@/components/MdContent";
-import { Button, Card, Modal, Spin, Table, Tag, message } from "antd";
+import {
+  Button,
+  Card,
+  Modal,
+  Radio,
+  Space,
+  Spin,
+  Table,
+  Tag,
+  message,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import moment from "moment";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 export default function Paper() {
+  const [pageStatus, setPageStatus] = useState<1 | -1 | 0 | 99>(99);
   const [preview, setPreview] = useState<boolean>(false);
   const mdStr = useRef<string>("");
   const { mutateAsync, isLoading } = getMdData();
@@ -28,14 +39,17 @@ export default function Paper() {
     {
       dataIndex: "viewCount",
       title: "阅读量",
+      render: (val) => ([-1, 0].includes(pageStatus) ? 0 : val),
     },
     {
       dataIndex: "likeCount",
       title: "点赞",
+      render: (val) => ([-1, 0].includes(pageStatus) ? 0 : val),
     },
     {
       dataIndex: "unlikeCount",
       title: "点踩",
+      render: (val) => ([-1, 0].includes(pageStatus) ? 0 : val),
     },
     {
       dataIndex: "description",
@@ -47,8 +61,10 @@ export default function Paper() {
       render: (val) =>
         val === 1 ? (
           <Tag color="#1677ff">正常</Tag>
+        ) : val === 0 ? (
+          <Tag color="orange">待审核</Tag>
         ) : (
-          <Tag color="red">待审核</Tag>
+          <Tag color="red">未通过</Tag>
         ),
     },
     {
@@ -77,9 +93,31 @@ export default function Paper() {
       ),
     },
   ];
+  const filterData = useMemo(() => {
+    if (pageStatus === 99) {
+      return data?.pagesList;
+    } else {
+      return data?.pagesList.filter(
+        (item) => item.isCheckSuccess === pageStatus
+      );
+    }
+  }, [data, pageStatus]);
   return (
     <Card>
-      <Table dataSource={data?.pagesList} columns={columns} key="pageid" />
+      <Space>
+        <span>状态：</span>
+        <Radio.Group
+          optionType="button"
+          defaultValue={pageStatus}
+          onChange={(e) => setPageStatus(e.target.value)}
+        >
+          <Radio value={99}>全部</Radio>
+          <Radio value={1}>正常</Radio>
+          <Radio value={0}>待审核</Radio>
+          <Radio value={-1}>未通过</Radio>
+        </Radio.Group>
+      </Space>
+      <Table dataSource={filterData} columns={columns} key="pageid" />
       <Modal
         title="MD效果预览"
         footer={null}

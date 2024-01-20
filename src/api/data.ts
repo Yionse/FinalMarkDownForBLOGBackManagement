@@ -55,6 +55,7 @@ export interface PagesList {
   viewCount: number;
   username: string;
   pagesNumber: string;
+  isCheckSuccess: number;
 }
 
 // 网站数据
@@ -104,7 +105,7 @@ export function getUserList() {
   );
 }
 
-// 用户列表
+// 文章列表
 export function getPagesList() {
   return useQuery(
     ["pagesList"],
@@ -119,5 +120,21 @@ export function getPagesList() {
 export function getMdData() {
   return useMutation(["pageData"], async (pageId: string) =>
     get<{ content: string }>("/back/md", { pageId })
+  );
+}
+
+// 审核结果
+export function fetchCheck() {
+  return useMutation(
+    ["checkPage"],
+    async ({
+      pageid,
+      isCheckSuccess,
+      reason = "",
+    }: {
+      pageid: string;
+      isCheckSuccess: number;
+      reason?: string;
+    }) => post("/back/check", { pageid, isCheckSuccess, reason })
   );
 }

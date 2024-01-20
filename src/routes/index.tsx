@@ -37,11 +37,6 @@ export const routes: MenuItem[] = [
         key: "list",
       },
       {
-        label: "文章管理",
-        icon: <PaperClipOutlined />,
-        key: "manage",
-      },
-      {
         label: "文章审核",
         icon: <CheckCircleOutlined />,
         key: "check",
