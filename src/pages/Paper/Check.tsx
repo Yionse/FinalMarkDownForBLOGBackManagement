@@ -43,10 +43,6 @@ export default function Check() {
       render: (val) => moment(Number(val)).format("YYYY-MM-DD HH:mm:ss"),
     },
     {
-      dataIndex: "description",
-      title: "描述",
-    },
-    {
       dataIndex: "isCheckSuccess",
       title: "状态",
       render: (val) =>
@@ -58,7 +54,7 @@ export default function Check() {
     },
     {
       title: "操作",
-      width: 150,
+      width: 300,
       render: (_, record) => (
         <>
           <Button
@@ -70,13 +66,6 @@ export default function Check() {
             }}
           >
             预览
-          </Button>
-          <Button
-            type="link"
-            style={{ color: "red" }}
-            onClick={() => message.error("功能暂未开放")}
-          >
-            删除
           </Button>
           <Button type="link" loading={isLoading}>
             <Popconfirm

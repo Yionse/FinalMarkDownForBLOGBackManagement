@@ -3,6 +3,7 @@ import {
   HomeOutlined,
   OrderedListOutlined,
   PaperClipOutlined,
+  ProfileOutlined,
   SnippetsOutlined,
   UnorderedListOutlined,
   UserAddOutlined,
@@ -20,6 +21,11 @@ export const routes: MenuItem[] = [
     label: "主页",
     icon: <HomeOutlined />,
     key: "home",
+  },
+  {
+    label: "文章面板",
+    icon: <ProfileOutlined />,
+    key: "indexPg",
   },
   {
     label: "用户列表",

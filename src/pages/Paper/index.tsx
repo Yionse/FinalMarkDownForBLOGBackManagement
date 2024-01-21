@@ -1,8 +1,9 @@
-import { PagesList, getMdData, getPagesList } from "@/api/data";
+import { PagesList, fetchCheck, getMdData, getPagesList } from "@/api/data";
 import MdPreview from "@/components/MdContent";
 import {
   Button,
   Card,
+  Input,
   Modal,
   Radio,
   Space,
@@ -16,11 +17,15 @@ import moment from "moment";
 import { useMemo, useRef, useState } from "react";
 
 export default function Paper() {
-  const [pageStatus, setPageStatus] = useState<1 | -1 | 0 | 99>(99);
+  const [reason, setReason] = useState<string>("");
+  const [isShowReason, setIsShowReason] = useState<boolean>(false);
+  const [pageStatus, setPageStatus] = useState<1 | -1 | 99>(99);
   const [preview, setPreview] = useState<boolean>(false);
   const mdStr = useRef<string>("");
   const { mutateAsync, isLoading } = getMdData();
-  const { data } = getPagesList(pageStatus);
+  const { mutateAsync: checkPage } = fetchCheck();
+  const currentPage = useRef<PagesList>();
+  const { data, refetch } = getPagesList(pageStatus);
   const columns: ColumnsType<PagesList> = [
     {
       dataIndex: "title",
@@ -53,10 +58,7 @@ export default function Paper() {
         ]
       : []),
     ...(pageStatus === -1 ? [{ title: "原因", dataIndex: "reason" }] : []),
-    {
-      dataIndex: "description",
-      title: "描述",
-    },
+
     {
       dataIndex: "isCheckSuccess",
       title: "状态",
@@ -64,16 +66,27 @@ export default function Paper() {
         val === 1 ? (
           <Tag color="#1677ff">正常</Tag>
         ) : val === 0 ? (
-          <Tag color="orange">待审核</Tag>
+          <Tag color="orange">审核</Tag>
         ) : (
           <Tag color="red">未通过</Tag>
         ),
     },
     {
       title: "操作",
-      width: 150,
+      width: 200,
       render: (_, record) => (
         <>
+          {record.isCheckSuccess === 1 && (
+            <Button
+              type="link"
+              onClick={() => {
+                setIsShowReason(true);
+                currentPage.current = record;
+              }}
+            >
+              下架
+            </Button>
+          )}
           <Button
             type="link"
             onClick={async () => {
@@ -83,13 +96,6 @@ export default function Paper() {
             }}
           >
             预览
-          </Button>
-          <Button
-            type="link"
-            style={{ color: "red" }}
-            onClick={() => message.error("功能暂未开放")}
-          >
-            删除
           </Button>
         </>
       ),
@@ -115,7 +121,6 @@ export default function Paper() {
         >
           <Radio value={99}>全部</Radio>
           <Radio value={1}>正常</Radio>
-          <Radio value={0}>待审核</Radio>
           <Radio value={-1}>未通过</Radio>
         </Radio.Group>
       </Space>
@@ -129,7 +134,35 @@ export default function Paper() {
       >
         <MdPreview data={mdStr.current || ""} />
       </Modal>
-      <Spin spinning={isLoading} fullscreen />
+      <Modal
+        title="请输入下架原因"
+        open={isShowReason}
+        confirmLoading={isLoading}
+        onCancel={() => setIsShowReason(false)}
+        okText="确定"
+        cancelText="取消"
+        onOk={async () => {
+          if (!reason) {
+            message.warning("原因不能为空");
+            return;
+          }
+          await checkPage({
+            pageid: currentPage.current?.pageid!,
+            isCheckSuccess: -1,
+            reason,
+          });
+          message.success("操作成功");
+          setIsShowReason(false);
+          setReason("");
+          refetch();
+        }}
+      >
+        <Input
+          type="text"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
+      </Modal>
     </Card>
   );
 }

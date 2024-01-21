@@ -36,20 +36,6 @@ export default function User() {
       dataIndex: "prefession",
       title: "专业",
     },
-    {
-      title: "操作",
-      render: () => (
-        <>
-          <Button
-            type="link"
-            style={{ color: "red" }}
-            onClick={() => message.error("功能暂未开放")}
-          >
-            删除
-          </Button>
-        </>
-      ),
-    },
   ];
   return (
     <Card>
