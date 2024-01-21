@@ -20,7 +20,7 @@ export default function Paper() {
   const [preview, setPreview] = useState<boolean>(false);
   const mdStr = useRef<string>("");
   const { mutateAsync, isLoading } = getMdData();
-  const { data } = getPagesList();
+  const { data } = getPagesList(pageStatus);
   const columns: ColumnsType<PagesList> = [
     {
       dataIndex: "title",
@@ -36,21 +36,23 @@ export default function Paper() {
       title: "创建时间",
       render: (val) => moment(Number(val)).format("YYYY-MM-DD HH:mm:ss"),
     },
-    {
-      dataIndex: "viewCount",
-      title: "阅读量",
-      render: (val) => ([-1, 0].includes(pageStatus) ? 0 : val),
-    },
-    {
-      dataIndex: "likeCount",
-      title: "点赞",
-      render: (val) => ([-1, 0].includes(pageStatus) ? 0 : val),
-    },
-    {
-      dataIndex: "unlikeCount",
-      title: "点踩",
-      render: (val) => ([-1, 0].includes(pageStatus) ? 0 : val),
-    },
+    ...([99, 1].includes(pageStatus)
+      ? [
+          {
+            dataIndex: "viewCount",
+            title: "阅读量",
+          },
+          {
+            dataIndex: "likeCount",
+            title: "点赞",
+          },
+          {
+            dataIndex: "unlikeCount",
+            title: "点踩",
+          },
+        ]
+      : []),
+    ...(pageStatus === -1 ? [{ title: "原因", dataIndex: "reason" }] : []),
     {
       dataIndex: "description",
       title: "描述",

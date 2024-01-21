@@ -106,9 +106,9 @@ export function getUserList() {
 }
 
 // 文章列表
-export function getPagesList() {
+export function getPagesList(pageStatus: number) {
   return useQuery(
-    ["pagesList"],
+    ["pagesList", pageStatus],
     async () => post<{ pagesList: PagesList[] }>("/back/pagesList"),
     {
       refetchOnWindowFocus: false,
