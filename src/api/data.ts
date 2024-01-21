@@ -58,6 +58,21 @@ export interface PagesList {
   isCheckSuccess: number;
 }
 
+export interface Data {
+  qq: string;
+  pageid: string;
+  title: string;
+  coverUrl: string;
+  createTime: string;
+  likeCount: number;
+  unlikeCount: number;
+  description: string;
+  viewCount: number;
+  isCheckSuccess: number;
+  reason: string;
+  position: string;
+}
+
 // 网站数据
 export function getVisitData() {
   return useQuery(
@@ -136,5 +151,19 @@ export function fetchCheck() {
       isCheckSuccess: number;
       reason?: string;
     }) => post("/back/check", { pageid, isCheckSuccess, reason })
+  );
+}
+
+// 获取首页文章展示设置
+export function getIndexPage(position: "home" | "swipe" | "slide" | "") {
+  return useQuery(["showPage", position], () =>
+    post<{ data: Data[] }>("/back/showPage", { position })
+  );
+}
+
+// 获取当前可以选择的文章
+export function getIsSelectPage() {
+  return useQuery(["selectedPage"], async () =>
+    post<{ data: Data[] }>("/back/showPage")
   );
 }
