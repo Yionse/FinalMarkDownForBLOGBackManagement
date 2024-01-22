@@ -1,4 +1,4 @@
-import { get, post } from ".";
+import { ClientError, get, post } from ".";
 import { useMutation, useQuery } from "react-query";
 
 export interface RespectivelyCount {
@@ -164,6 +164,34 @@ export function getIndexPage(position: "home" | "swipe" | "slide" | "") {
 // 获取当前可以选择的文章
 export function getIsSelectPage() {
   return useQuery(["selectedPage"], async () =>
-    post<{ data: Data[] }>("/back/showPage")
+    post<{ data: Data[] }>("/back/showPage", { position: "" })
+  );
+}
+
+// 进行替换操作
+export function fetchReplace() {
+  return useMutation(
+    ["replace"],
+    async (param: {
+      preId: string;
+      newId: string;
+      position: "home" | "swipe" | "slide";
+    }) => post("/back/replace", param)
+  );
+}
+
+// 添加展示文章
+export function fetchAddPage() {
+  return useMutation(
+    ["addPage"],
+    async (param: { pageid: string; position: "home" | "swipe" | "slide" }) =>
+      post("/back/addPage", param)
+  );
+}
+
+// 删除展示文章
+export function fetchDeletePage() {
+  return useMutation(["deletePage"], async (pageid: string) =>
+    post("/back/delPage", { pageid })
   );
 }
