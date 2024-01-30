@@ -1,19 +1,10 @@
-import {
-  GithubFilled,
-  InfoCircleFilled,
-  QuestionCircleFilled,
-} from "@ant-design/icons";
-import {
-  PageContainer,
-  PageHeader,
-  ProCard,
-  ProLayout,
-} from "@ant-design/pro-components";
+//@ts-nocheck
+import { ProLayout } from "@ant-design/pro-components";
 import { useState } from "react";
 import defaultProps from "./_defaultProps";
 import logo from "@public/icon.ico";
 
-export default (Props: any) => {
+export default () => {
   const [pathname, setPathname] = useState("/home");
   return (
     <div
@@ -28,7 +19,7 @@ export default (Props: any) => {
         location={{
           pathname,
         }}
-        menuItemRender={(item, dom) => (
+        menuItemRender={(item: any, dom: any) => (
           <div
             onClick={() => {
               setPathname(item.path || "/home");

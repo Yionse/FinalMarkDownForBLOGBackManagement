@@ -1,12 +1,9 @@
 import {
   CheckCircleOutlined,
   HomeOutlined,
-  OrderedListOutlined,
-  PaperClipOutlined,
   ProfileOutlined,
   SnippetsOutlined,
   UnorderedListOutlined,
-  UserAddOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";

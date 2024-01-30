@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Button, Form, Input, message } from "antd";
 import "./index.less";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";

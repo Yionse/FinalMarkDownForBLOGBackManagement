@@ -6,16 +6,7 @@ import {
   getIndexPage,
   getIsSelectPage,
 } from "@/api/data";
-import {
-  Button,
-  Card,
-  Modal,
-  Popconfirm,
-  Radio,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { Button, Card, Modal, Popconfirm, Radio, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import { useRef, useState } from "react";

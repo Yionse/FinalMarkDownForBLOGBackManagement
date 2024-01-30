@@ -1,5 +1,5 @@
 import { UserList, getUserList } from "@/api/data";
-import { Avatar, Button, Card, message } from "antd";
+import { Avatar, Card } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import moment from "moment";
 

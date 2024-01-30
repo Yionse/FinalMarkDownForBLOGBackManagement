@@ -1,4 +1,4 @@
-import { ClientError, get, post } from ".";
+import { get, post } from ".";
 import { useMutation, useQuery } from "react-query";
 
 export interface RespectivelyCount {

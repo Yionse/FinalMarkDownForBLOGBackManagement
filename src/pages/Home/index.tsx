@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Layout, Menu, message, theme } from "antd";
+import { Layout, Menu, message, theme } from "antd";
 import logo from "@public/icon.ico";
 import { Outlet, useNavigate } from "react-router-dom";
 import { routes } from "@/routes";
