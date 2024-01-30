@@ -1,9 +1,8 @@
 import axios from "axios";
 import { message } from "antd";
-const BASE_URL = "http://localhost:9876";
 
 const httpInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: `${import.meta.env.VITE_BASE_URL}:${import.meta.env.VITE_BASE_PORT}`,
   timeout: 5000,
 });
 
