@@ -2,7 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 
 const httpInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_BASE_URL}:${import.meta.env.VITE_BASE_PORT}`,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 5000,
 });
 
